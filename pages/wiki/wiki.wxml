@@ -1,0 +1,65 @@
+<!--pages/wiki/wiki.wxml-->
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar">
+    <view class="search-input">
+      <image class="search-icon" src="/images/search.png" mode="aspectFit"></image>
+      <input class="input" type="text" placeholder="搜索食物热量和营养" placeholder-class="placeholder" />
+      <image class="scan-icon" src="/images/scan.png" mode="aspectFit"></image>
+    </view>
+  </view>
+
+  <!-- 分类导航 -->
+  <view class="category-nav">
+    <view 
+      class="category-item" 
+      wx:for="{{categories}}" 
+      wx:key="id"
+      bindtap="onCategoryTap"
+      data-id="{{item.id}}"
+    >
+      <view class="category-icon">{{item.icon}}</view>
+      <view class="category-name">{{item.name}}</view>
+    </view>
+  </view>
+
+  <!-- 文章列表 -->
+  <view class="article-list">
+    <!-- 推荐文章 -->
+    <view class="featured-article" wx:if="{{articles.length > 0}}">
+      <view class="featured-tag">{{articles[0].category || '药物减肥'}}</view>
+      <view class="featured-title">{{articles[0].title}}</view>
+      <view class="featured-tags">
+        <view class="tag" wx:for="{{articles[0].tags}}" wx:key="index" wx:for-item="tag">
+          {{tag}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 其他文章 -->
+    <view class="article-section" wx:if="{{articles.length > 1}}">
+      <view class="section-title">肥胖的定义</view>
+      <view 
+        class="article-item" 
+        wx:for="{{articles}}" 
+        wx:key="id"
+        wx:if="{{index > 0}}"
+        bindtap="onArticleTap"
+        data-id="{{item.id}}"
+      >
+        <view class="article-info">
+          <view class="article-title">{{item.title}}</view>
+          <view class="article-meta">
+            <view class="article-category" wx:if="{{item.category}}">{{item.category}}</view>
+            <view class="article-tags">
+              <view class="tag" wx:for="{{item.tags}}" wx:key="index" wx:for-item="tag">
+                {{tag}}
+              </view>
+            </view>
+          </view>
+        </view>
+        <view class="article-arrow">›</view>
+      </view>
+    </view>
+  </view>
+</view>

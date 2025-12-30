@@ -1,0 +1,199 @@
+<!--pages/record/record.wxml-->
+<view class="container">
+  <!-- 首诊信息提示 -->
+  <view class="first-visit-banner" wx:if="{{showFirstVisitTip}}">
+    <view class="banner-content">
+      <image class="banner-icon" src="/images/stethoscope.png" mode="aspectFit"></image>
+      <view class="banner-text">
+        <view class="banner-title">请完善首诊信息</view>
+        <view class="banner-subtitle">以便医生提供更好的专业方案</view>
+      </view>
+    </view>
+    <view class="banner-arrow">›</view>
+  </view>
+
+  <!-- 饮食&运动记录 -->
+  <view class="card">
+    <view class="card-header">
+      <view class="card-title">饮食&运动</view>
+      <view class="update-time">{{dietRecord.updateTime}} 更新</view>
+      <button class="add-record-btn" bindtap="onAddRecord">拍照记录</button>
+    </view>
+
+    <!-- 卡路里统计 -->
+    <view class="calorie-stats">
+      <view class="calorie-item">
+        <view class="calorie-label">已超出(千卡)</view>
+        <view class="calorie-value large">{{dietRecord.caloriesBurned}}</view>
+      </view>
+      <view class="calorie-divider">=</view>
+      <view class="calorie-item">
+        <view class="calorie-label">预算</view>
+        <view class="calorie-value">{{dietRecord.caloriesBudget}}</view>
+      </view>
+      <view class="calorie-divider">-</view>
+      <view class="calorie-item">
+        <view class="calorie-label">饮食</view>
+        <view class="calorie-value">{{dietRecord.caloriesIntake}}</view>
+      </view>
+      <view class="calorie-divider">+</view>
+      <view class="calorie-item">
+        <view class="calorie-label">运动</view>
+        <view class="calorie-value">{{dietRecord.caloriesExercise}}</view>
+      </view>
+    </view>
+
+    <!-- 快捷入口 -->
+    <view class="meal-shortcuts">
+      <view class="shortcut-item" bindtap="onMealTap" data-type="breakfast">
+        <view class="shortcut-icon">🌅</view>
+        <view class="shortcut-name">早餐</view>
+      </view>
+      <view class="shortcut-item" bindtap="onMealTap" data-type="lunch">
+        <view class="shortcut-icon">🍚</view>
+        <view class="shortcut-name">午餐</view>
+      </view>
+      <view class="shortcut-item" bindtap="onMealTap" data-type="dinner">
+        <view class="shortcut-icon">🍜</view>
+        <view class="shortcut-name">晚餐</view>
+      </view>
+      <view class="shortcut-item" bindtap="onMealTap" data-type="snack">
+        <view class="shortcut-icon">🍎</view>
+        <view class="shortcut-name">加餐</view>
+      </view>
+      <view class="shortcut-item" bindtap="onExerciseTap">
+        <view class="shortcut-icon">🏃</view>
+        <view class="shortcut-name">运动</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 体重记录 -->
+  <view class="card">
+    <view class="card-header">
+      <view class="card-title">体重记录</view>
+      <button class="record-weight-btn" bindtap="onRecordWeight">记录体重</button>
+    </view>
+
+    <!-- 当前体重显示 -->
+    <view class="current-weight">
+      <text class="weight-value">{{currentWeight}}</text>
+      <text class="weight-unit">kg</text>
+    </view>
+
+    <!-- 体重趋势图 -->
+    <view class="weight-chart">
+      <canvas canvas-id="weightChart" class="chart-canvas"></canvas>
+      <view class="chart-timeline">
+        <view class="timeline-item" wx:for="{{weightRecords}}" wx:key="date">
+          <view class="timeline-label">{{item.date}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 健康指标卡片区 -->
+  <view class="health-metrics">
+    <!-- 步数 -->
+    <view class="metric-card">
+      <view class="metric-header">
+        <view class="metric-title">步数</view>
+        <button class="metric-record-btn" bindtap="onRecordSteps">记录</button>
+      </view>
+      <view class="metric-tip">{{healthMetrics.steps.tip}}</view>
+      <view class="metric-value-container">
+        <view class="metric-value">{{healthMetrics.steps.value || '--'}}</view>
+        <view class="metric-unit">{{healthMetrics.steps.unit}}</view>
+        <view class="metric-icon">👟</view>
+      </view>
+    </view>
+
+    <!-- 腰围 -->
+    <view class="metric-card">
+      <view class="metric-header">
+        <view class="metric-title">腰围</view>
+        <button class="metric-record-btn" bindtap="onRecordWaistline">记录</button>
+      </view>
+      <view class="metric-tip">{{healthMetrics.waistline.tip}}</view>
+      <view class="metric-value-container">
+        <view class="metric-value">{{healthMetrics.waistline.value || '--'}}</view>
+        <view class="metric-unit">{{healthMetrics.waistline.unit}}</view>
+        <view class="metric-icon">📏</view>
+      </view>
+    </view>
+
+    <!-- 血糖 -->
+    <view class="metric-card">
+      <view class="metric-header">
+        <view class="metric-title">血糖</view>
+        <button class="metric-record-btn" bindtap="onRecordBloodSugar">记录</button>
+      </view>
+      <view class="metric-tip">{{healthMetrics.bloodSugar.tip}}</view>
+      <view class="metric-value-container">
+        <view class="metric-value">{{healthMetrics.bloodSugar.value || '--'}}</view>
+        <view class="metric-unit">{{healthMetrics.bloodSugar.unit}}</view>
+        <view class="metric-icon">🩺</view>
+      </view>
+    </view>
+
+    <!-- 血压 -->
+    <view class="metric-card">
+      <view class="metric-header">
+        <view class="metric-title">血压</view>
+        <button class="metric-record-btn" bindtap="onRecordBloodPressure">记录</button>
+      </view>
+      <view class="metric-tip">{{healthMetrics.bloodPressure.tip}}</view>
+      <view class="metric-value-container">
+        <view class="metric-value">{{healthMetrics.bloodPressure.systolic || '--'}}</view>
+        <view class="metric-unit">{{healthMetrics.bloodPressure.unit}}</view>
+        <view class="metric-icon">❤️</view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 食物搜索弹窗 -->
+  <view class="food-search-modal" wx:if="{{showFoodSearch}}">
+    <view class="modal-mask" bindtap="onCloseFoodSearch"></view>
+    <view class="modal-content {{showFoodSearch ? 'modal-show' : ''}}">
+      <!-- 顶部导航 -->
+      <view class="modal-header">
+        <view class="back-btn" bindtap="onCloseFoodSearch">‹</view>
+        <view class="modal-title">食物搜索</view>
+        <view class="placeholder"></view>
+      </view>
+
+      <!-- 搜索框 -->
+      <view class="search-container">
+        <view class="search-box">
+          <image class="search-icon" src="/images/search.png" mode="aspectFit"></image>
+          <input 
+            class="search-input" 
+            type="text" 
+            placeholder="请输入食物名称" 
+            placeholder-class="search-placeholder"
+            value="{{searchKeyword}}"
+            bindinput="onSearchInput"
+          />
+        </view>
+      </view>
+
+      <!-- 食物列表 -->
+      <scroll-view class="food-list" scroll-y>
+        <view 
+          class="food-item" 
+          wx:for="{{filteredFoods}}" 
+          wx:key="id"
+          bindtap="onSelectFood"
+          data-food="{{item}}"
+        >
+          <view class="food-icon">{{item.icon}}</view>
+          <view class="food-info">
+            <view class="food-name">{{item.name}}</view>
+            <view class="food-detail">{{item.portion}} | {{item.calories}} 千卡</view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+  </view>
+</view>
+

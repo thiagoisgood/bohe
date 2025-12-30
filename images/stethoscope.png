@@ -1,0 +1,20 @@
+<!-- 占位图标，用于首诊信息横幅 -->
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <g fill="none" stroke="white" stroke-width="3" stroke-linecap="round">
+    <!-- 听诊器管道 -->
+    <path d="M 25 15 Q 25 35, 15 45" />
+    <path d="M 55 15 Q 55 35, 65 45" />
+    
+    <!-- 听诊器耳塞 -->
+    <circle cx="25" cy="12" r="4" fill="white"/>
+    <circle cx="55" cy="12" r="4" fill="white"/>
+    
+    <!-- 听诊器胸件 -->
+    <circle cx="40" cy="60" r="12" stroke-width="4"/>
+    <circle cx="40" cy="60" r="8" fill="white"/>
+    
+    <!-- 连接管 -->
+    <path d="M 15 45 Q 20 55, 28 58" />
+    <path d="M 65 45 Q 60 55, 52 58" />
+  </g>
+</svg>

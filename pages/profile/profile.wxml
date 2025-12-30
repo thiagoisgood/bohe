@@ -1,0 +1,30 @@
+<!--pages/profile/profile.wxml-->
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-info">
+      <image class="avatar" src="{{userInfo.avatar}}" mode="aspectFill"></image>
+      <view class="user-details">
+        <view class="nickname">{{userInfo.nickname}}</view>
+      </view>
+    </view>
+    <view class="arrow">›</view>
+  </view>
+
+  <!-- 功能菜单列表 -->
+  <view class="menu-list">
+    <view 
+      class="menu-item" 
+      wx:for="{{menus}}" 
+      wx:key="id"
+      bindtap="onMenuTap"
+      data-path="{{item.path}}"
+    >
+      <view class="menu-left">
+        <view class="menu-icon" style="background-color: {{item.iconColor}};">{{item.icon}}</view>
+        <view class="menu-title">{{item.title}}</view>
+      </view>
+      <view class="menu-arrow">›</view>
+    </view>
+  </view>
+</view>
