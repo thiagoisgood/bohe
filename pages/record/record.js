@@ -72,8 +72,8 @@ Page({
 
                 // 计算数据范围
                 const weights = validRecords.map(r => r.weight);
-                const minWeight = Math.min(...weights);
-                const maxWeight = Math.max(...weights);
+                const minWeight = Math.min.apply(null, weights);
+                const maxWeight = Math.max.apply(null, weights);
                 const weightRange = maxWeight - minWeight || 1;
 
                 // 计算每个数据点的位置
